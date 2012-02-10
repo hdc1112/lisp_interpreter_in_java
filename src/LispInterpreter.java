@@ -9,17 +9,17 @@ public class LispInterpreter {
 
 		while (true) {
 			// test case
-			// 1)  23 passed
-			// 2)  (23 . 24) passed
-			// 3)  (23 . (24 . 25)) passed
-			// 4)  (   23 . (24 . 25)) passed
-			// 5)  (\t 23 . (24 . 25)) passed
-			// 6)  (23 . 24     \n   ) passed
-			// 7)  (2 3) passed
-			// 8)  (2 3   ) passed
-			// 9)  (2 3 4 5 6 7 8 9    ) passed
+			// 1) 23 passed
+			// 2) (23 . 24) passed
+			// 3) (23 . (24 . 25)) passed
+			// 4) ( 23 . (24 . 25)) passed
+			// 5) (\t 23 . (24 . 25)) passed
+			// 6) (23 . 24 \n ) passed
+			// 7) (2 3) passed
+			// 8) (2 3 ) passed
+			// 9) (2 3 4 5 6 7 8 9 ) passed
 			// 10) (2 (3 . 4)) passed
-			// 11) (2 (4 . 5 )  ) passed
+			// 11) (2 (4 . 5 ) ) passed
 			// 12) ((2 . 3) (4 . 5)) passed
 			// 13) ((2 3) (4 5)) passed
 			// 14) ((2 3 4 5) 23 ) passed
@@ -29,6 +29,7 @@ public class LispInterpreter {
 			// 18) (2 3 . 5) passed (should fail)
 			// 19) <23 passed (should fail, and should restart normally)
 			// 20) (23 ] passed (should fail, and should restart normally)
+			// 21) (2 5 6 7 1 \n 23 (2 . 4) 3 (4 5) \n ) passed
 			try {
 				SExp se = Input.input();
 				SExp.SExpPrintOut(se);
