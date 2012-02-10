@@ -1,6 +1,7 @@
 /*
  * UnitTest.java 
  * called before everything
+ * only used by LispInterpreter.java
  * 
  * Dachuan Huang
  * huangda@cse.ohio-state.edu
@@ -39,7 +40,7 @@ public class UnitTest {
 		}
 	}
 
-	public static boolean SExptoStringTest(SExp se, String e) {
+	private static boolean SExptoStringTest(SExp se, String e) {
 		int r = se.toString().compareTo(e);
 		return r == 0 ? true : false;
 	}

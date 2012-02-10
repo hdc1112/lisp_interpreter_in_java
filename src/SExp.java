@@ -5,6 +5,7 @@ import java.util.List;
 /*
  * SExp.java 
  * Lisp's s-exp class
+ * important basis, used by everyone
  * 
  * Dachuan Huang
  * huangda@cse.ohio-state.edu
@@ -18,6 +19,8 @@ public class SExp {
 	// if isAtom == true
 	private boolean isNum;
 	// if isNum == false, then it's an identifier
+	// if this assumption doesn't hold, then change
+	// corresponding code
 	private String name;
 	// some constant sexp's value
 	// we only use capital letter in this prj
@@ -27,6 +30,8 @@ public class SExp {
 	private int value;
 
 	// Getters & Setters
+	// if there is similar function defined
+	// in LispBuiltin, use that. don't use this.
 	public boolean isAtom() {
 		return isAtom;
 	}
@@ -63,6 +68,10 @@ public class SExp {
 		return this;
 	}
 
+	public boolean isIdentifier() {
+		return !isNum();
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -84,6 +93,7 @@ public class SExp {
 	// static idPointers
 	// unlimited length
 	// I should try other efficient data-structure
+	// warning: any identifier should be added into this
 	private static List<SExp> IDPOINTERS = new ArrayList<SExp>();
 	static {
 		// add some id's into idPointers
@@ -134,14 +144,55 @@ public class SExp {
 		return s;
 	}
 
+	// short name
+	public static SExp getIdSExp(String name) {
+		return getIdentifierSExp(name);
+	}
+
+	public static SExp _getIdSExp(String name) {
+		return _getIdentifierSExp(name);
+	}
+
+	public static SExp getT() {
+		return getIdSExp(SExp.T_name);
+	}
+
+	public static SExp getNIL() {
+		return getIdSExp(SExp.NIL_name);
+	}
+
+	public static boolean isT(SExp s) {
+		if (s.isAtom() == true && s.isNum() == false
+				&& s.getName().equals(SExp.T_name)) {
+			return true;
+		}
+		return false;
+	}
+
+	// there are two ways to compare two identifiers
+	// 1st, compare names; 2nd, compare reference of SExp.
+	// under the assumption that one name has only one reference
+	// then these two methods are the same
+	public static boolean isNIL(SExp s) {
+		if (s.isAtom() == true && s.isNum() == false
+				&& s.getName().equals(SExp.NIL_name)) {
+			return true;
+		}
+		return false;
+	}
+
+	// short name. >>>end
+
 	@Override
 	// toString
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
-		if (isAtom == true) {
-			if (isNum == true) {
+		if (isAtom() == true) {
+			if (isNum() == true) {
 				sb.append(value);
 			} else {
+				// if it's not a number, then'
+				// it's an identifer
 				sb.append(name);
 			}
 		} else {
@@ -158,4 +209,5 @@ public class SExp {
 
 	// isList
 	// public static boolean isList(SExp s) {}
+
 }

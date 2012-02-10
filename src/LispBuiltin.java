@@ -1,6 +1,9 @@
 /*
  * LispBuiltin.java 
  * Lisp's built-in functions' implementation
+ * every function here corresponds to a Lisp built-in function.
+ * e.g. cons() --> (cons 2 3)
+ * used by SExp, Evaluator
  * 
  * Dachuan Huang
  * huangda@cse.ohio-state.edu
@@ -19,7 +22,7 @@ class LispBuiltinException extends Exception {
 public class LispBuiltin {
 	// for _null function, we still store "null" name, be careful
 	public static final String[] BUILTINIDENTIFIERS = { "cons", "car", "cdr",
-			"atom", "null" };
+			"atom", "null", "eq" };
 
 	public static SExp cons(SExp left, SExp right) {
 		// because this isn't an atom, so just initialize
@@ -43,25 +46,35 @@ public class LispBuiltin {
 	}
 
 	public static SExp atom(SExp s) {
-		if (true == s.isAtom()) {
-			// there is an assumption, that "T" is already
-			// in the IDPOINTERS, so I didn't use _getIdentifier
-			return SExp.getIdentifierSExp(SExp.T_name);
-		} else {
-			return SExp.getIdentifierSExp(SExp.NIL_name);
-		}
+		// there is an assumption, that "T" is already
+		// in the IDPOINTERS, so I didn't use _getIdentifier
+		return s.isAtom() ? SExp.getT() : SExp.getNIL();
 	}
 
 	// we can't name this function "null"
 	// because "null" is a keyword in Java
-	public static SExp _null(SExp s) {
+	public static SExp _null(SExp s) throws LispBuiltinException {
 		// we just compare the reference,
 		// because there is an assumption, that for every identifier
 		// there is only one corresponding instance in IDPOINTERS
-		if (s == SExp.getIdentifierSExp(SExp.NIL_name)) {
-			return SExp.getIdentifierSExp(SExp.T_name);
+		if (SExp.isT(atom(s)) == false) {
+			throw new LispBuiltinException("null error: should be an atom");
+		}
+		return s == SExp.getNIL() ? SExp.getT() : SExp.getNIL();
+	}
+
+	public static SExp eq(SExp s1, SExp s2) throws LispBuiltinException {
+		if (SExp.isT(atom(s1)) == false || SExp.isT(atom(s2)) == false) {
+			throw new LispBuiltinException("eq error: should both be an atom");
 		} else {
-			return SExp.getIdentifierSExp(SExp.NIL_name);
+			if (s1.isNum() == true && s2.isNum() == true) {
+				return s1.getValue() == s2.getValue() ? SExp.getT() : SExp
+						.getNIL();
+			} else if (s1.isIdentifier() == true && s2.isIdentifier() == true) {
+				return s1 == s2 ? SExp.getT() : SExp.getNIL();
+			} else {
+				return SExp.getNIL();
+			}
 		}
 	}
 }

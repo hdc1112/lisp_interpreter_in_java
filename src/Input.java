@@ -3,6 +3,7 @@ import java.io.IOException;
 /*
  * Input.java 
  * 1st component, Input
+ * only used by LispInterpreter.java
  * 
  * Dachuan Huang
  * huangda@cse.ohio-state.edu
@@ -90,7 +91,7 @@ public class Input {
 		}
 	}
 
-	public static SExp input2() throws InputException, IOException {
+	private static SExp input2() throws InputException, IOException {
 		// Token t = new Token(); // wrong here
 		Token t = ckNextToken();
 		// if t.right_parenthesis_prefetched == true
@@ -267,7 +268,7 @@ public class Input {
 		current = null;
 	}
 
-	static class Token {
+	private static class Token {
 		static final int LEFT_PARENTHESIS = 1;
 		static final int RIGHT_PARENTHESIS = 2;
 		static final int DOT = 3;
