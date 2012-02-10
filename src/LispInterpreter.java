@@ -1,5 +1,14 @@
 import java.io.IOException;
 
+/*
+ * LispInterpreter.java 
+ * Lisp's Interpreter class
+ * also the main entry
+ * it has Input & Evaluator, two components
+ * 
+ * Dachuan Huang
+ * huangda@cse.ohio-state.edu
+ */
 public class LispInterpreter {
 
 	public static void main(String[] args) {
@@ -8,7 +17,7 @@ public class LispInterpreter {
 		UnitTest.test();
 
 		while (true) {
-			// test case
+			// test cases
 			// 1) 23 passed
 			// 2) (23 . 24) passed
 			// 3) (23 . (24 . 25)) passed
@@ -26,7 +35,7 @@ public class LispInterpreter {
 			// 15) (+24) passed
 			// 16) (-24 +24 -5 +6) passed
 			// 17) (2 \n\n\n . \n\n\n 3) passed
-			// 18) (2 3 . 5) passed (should fail)
+			// 18) (2 3 . 5) passed (should fail, and should restart normally)
 			// 19) <23 passed (should fail, and should restart normally)
 			// 20) (23 ] passed (should fail, and should restart normally)
 			// 21) (2 5 6 7 1 \n 23 (2 . 4) 3 (4 5) \n ) passed
@@ -41,7 +50,8 @@ public class LispInterpreter {
 				System.out.println(e);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				// e.printStackTrace();
+				System.out.println(e);
 			}
 		}
 	}

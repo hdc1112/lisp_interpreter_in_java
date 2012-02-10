@@ -1,3 +1,10 @@
+/*
+ * UnitTest.java 
+ * called before everything
+ * 
+ * Dachuan Huang
+ * huangda@cse.ohio-state.edu
+ */
 public class UnitTest {
 	// I didn't find a way to automatically
 	// test subroutine which needs user input
