@@ -29,9 +29,7 @@ public class Input {
 				// must have an entry in idPointers
 				// we must search it first and if no, create it and
 				// add it
-				SExp s = new SExp();
-				s.setAtom(true).setNum(false).setName(SExp.NIL_name);
-				return s;
+				return SExp.getNIL();
 			} else {
 				// so here we found out that token is not
 				// ), so we re-read it to a s-exp
@@ -105,9 +103,7 @@ public class Input {
 		if (t.type == Token.RIGHT_PARENTHESIS) {
 			// || t.right_parenthesis_prefetched == true) {
 			skipToken();
-			SExp s = new SExp();
-			s.setAtom(true).setNum(false).setName(SExp.NIL_name);
-			return s;
+			return SExp.getNIL();
 		} else if (t.type == Token.DOT) {
 			_flush();
 			throw new InputException("input2 error: meets a unwelcome dot.");

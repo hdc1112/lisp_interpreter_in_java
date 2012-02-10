@@ -94,6 +94,7 @@ public class SExp {
 	// unlimited length
 	// I should try other efficient data-structure
 	// warning: any identifier should be added into this
+	// warning: only contains identifier, no non-atoms
 	private static List<SExp> IDPOINTERS = new ArrayList<SExp>();
 	static {
 		// add some id's into idPointers
@@ -121,7 +122,7 @@ public class SExp {
 
 	// only search the IDPOINTERS, and return it if found, return null
 	// if it doesn't exisit
-	public static SExp getIdentifierSExp(String name) {
+	private static SExp getIdentifierSExp(String name) {
 		// when traverse through the IDPOINTERS, make sure
 		// we use Iterator, because we may have different underlying
 		// implementations for IDPOINTERS
@@ -134,7 +135,7 @@ public class SExp {
 	}
 
 	// same with getIdentifierSExp, but if not found, add it
-	public static SExp _getIdentifierSExp(String name) {
+	private static SExp _getIdentifierSExp(String name) {
 		SExp s = getIdentifierSExp(name);
 		if (null == s) {
 			s = new SExp();
@@ -185,6 +186,7 @@ public class SExp {
 
 	@Override
 	// toString
+	// warning: NIL 's output is NIL, not ()
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		if (isAtom() == true) {

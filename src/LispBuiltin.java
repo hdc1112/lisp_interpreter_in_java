@@ -32,12 +32,14 @@ public class LispBuiltin {
 		return sexp;
 	}
 
+	// warning: s can't be NIL. different from clisp
 	public static SExp car(SExp s) throws LispBuiltinException {
 		if (true == s.isAtom())
 			throw new LispBuiltinException("car error: shouldn't be an atom .");
 		return s.getLeft();
 	}
 
+	// warning: s can't be NIL
 	public static SExp cdr(SExp s) throws LispBuiltinException {
 		if (true == s.isAtom()) {
 			throw new LispBuiltinException("cdr error: shouldn't be an atom .");

@@ -16,8 +16,9 @@ public class LispInterpreter {
 		System.out.println("self test.");
 		UnitTest.test();
 
+		int exp_num = 1;
 		while (true) {
-			// test cases
+			// test cases for input
 			// 1) 23 passed
 			// 2) (23 . 24) passed
 			// 3) (23 . (24 . 25)) passed
@@ -39,7 +40,11 @@ public class LispInterpreter {
 			// 19) <23 passed (should fail, and should restart normally)
 			// 20) (23 ] passed (should fail, and should restart normally)
 			// 21) (2 5 6 7 1 \n 23 (2 . 4) 3 (4 5) \n ) passed
+			// test cases for evaluation
+			// 1)
 			try {
+				// clisp style. even wrong exp, we +1
+				System.out.printf("[%d]>", exp_num++);
 				SExp se = Input.input();
 				SExp.SExpPrintOut(se);
 			} catch (InputException e) {
