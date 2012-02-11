@@ -17,12 +17,34 @@ class LispBuiltinException extends Exception {
 	}
 }
 
+// warning: this interface has no method
+// so it is only used as a global variables pool
+interface LispBuiltin_Names {
+	// see Evaluate's apply
+	public static final String CONS_name = "CONS";
+	public static final String CAR_name = "CAR";
+	public static final String CDR_name = "CDR";
+	public static final String ATOM_name = "ATOM";
+	public static final String NULL_name = "NULL";
+	public static final String EQ_name = "EQ";
+	public static final String INT_name = "INT";
+	public static final String PLUS_name = "PLUS";
+	public static final String MINUS_name = "MINUS";
+	public static final String TIMES_name = "TIMES";
+	public static final String QUOTIENT_name = "QUOTIENT";
+	public static final String REMAINDER_name = "REMAINDER";
+	public static final String LESS_name = "LESS";
+	public static final String GREATER_name = "GREATER";
+}
+
 // some Lisp built-in functions
 // these functions can be used by user
-public class LispBuiltin {
+public class LispBuiltin implements LispBuiltin_Names {
 	// for _null function, we still store "null" name, be careful
-	public static final String[] BUILTINIDENTIFIERS = { "cons", "car", "cdr",
-			"atom", "null", "eq" };
+	public static final String[] BUILTINIDENTIFIERS = { CONS_name, CAR_name,
+			CDR_name, ATOM_name, NULL_name, EQ_name, INT_name, PLUS_name,
+			MINUS_name, TIMES_name, QUOTIENT_name, REMAINDER_name, LESS_name,
+			GREATER_name };
 
 	public static SExp cons(SExp left, SExp right) {
 		// because this isn't an atom, so just initialize
@@ -78,5 +100,102 @@ public class LispBuiltin {
 				return SExp.getNIL();
 			}
 		}
+	}
+
+	// we can't use "int" as the name
+	public static SExp _int(SExp s) {
+		if (SExp.isNIL(atom(s)) == true) {
+			return SExp.getNIL();
+		}
+		return s.isNum() ? SExp.getT() : SExp.getNIL();
+	}
+
+	public static SExp plus(SExp s1, SExp s2) throws LispBuiltinException {
+		if (SExp.isT(atom(s1)) == true && SExp.isT(atom(s2)) == true) {
+			if (SExp.isT(_int(s1)) == true && SExp.isT(_int(s2)) == true) {
+				SExp s = new SExp();
+				s.setAtom(true).setNum(true)
+						.setValue(s1.getValue() + s2.getValue());
+				return s;
+			}
+		}
+		throw new LispBuiltinException("plus error: should both be an integer");
+	}
+
+	public static SExp minus(SExp s1, SExp s2) throws LispBuiltinException {
+		if (SExp.isT(atom(s1)) == true && SExp.isT(atom(s2)) == true) {
+			if (SExp.isT(_int(s1)) == true && SExp.isT(_int(s2)) == true) {
+				SExp s = new SExp();
+				s.setAtom(true).setNum(true)
+						.setValue(s1.getValue() - s2.getValue());
+				return s;
+			}
+		}
+		throw new LispBuiltinException("minus error: should both be an integer");
+	}
+
+	public static SExp times(SExp s1, SExp s2) throws LispBuiltinException {
+		if (SExp.isT(atom(s1)) == true && SExp.isT(atom(s2)) == true) {
+			if (SExp.isT(_int(s1)) == true && SExp.isT(_int(s2)) == true) {
+				SExp s = new SExp();
+				s.setAtom(true).setNum(true)
+						.setValue(s1.getValue() * s2.getValue());
+				return s;
+			}
+		}
+		throw new LispBuiltinException("times error: should both be an integer");
+	}
+
+	public static SExp quotient(SExp s1, SExp s2) throws LispBuiltinException {
+		if (SExp.isT(atom(s1)) == true && SExp.isT(atom(s2)) == true) {
+			if (SExp.isT(_int(s1)) == true && SExp.isT(_int(s2)) == true) {
+				SExp s = new SExp();
+				s.setAtom(true).setNum(true)
+						.setValue(s1.getValue() / s2.getValue());
+				return s;
+			}
+		}
+		throw new LispBuiltinException(
+				"quotient error: should both be an integer");
+	}
+
+	public static SExp remainder(SExp s1, SExp s2) throws LispBuiltinException {
+		if (SExp.isT(atom(s1)) == true && SExp.isT(atom(s2)) == true) {
+			if (SExp.isT(_int(s1)) == true && SExp.isT(_int(s2)) == true) {
+				SExp s = new SExp();
+				s.setAtom(true).setNum(true)
+						.setValue(s1.getValue() % s2.getValue());
+				return s;
+			}
+		}
+		throw new LispBuiltinException(
+				"remainder error: should both be an integer");
+	}
+
+	public static SExp less(SExp s1, SExp s2) throws LispBuiltinException {
+		if (SExp.isT(atom(s1)) == true && SExp.isT(atom(s2)) == true) {
+			if (SExp.isT(_int(s1)) == true && SExp.isT(_int(s2)) == true) {
+				if (s1.getValue() < s2.getValue()) {
+					return SExp.getT();
+				} else {
+					return SExp.getNIL();
+				}
+			}
+		}
+		throw new LispBuiltinException("less error: should both be an integer");
+	}
+
+	public static SExp greater(SExp s1, SExp s2) throws LispBuiltinException {
+		if (SExp.isT(atom(s1)) == true && SExp.isT(atom(s2)) == true) {
+			if (SExp.isT(_int(s1)) == true && SExp.isT(_int(s2)) == true) {
+				if (s1.getValue() > s2.getValue()) {
+					return SExp.getT();
+				} else {
+					return SExp.getNIL();
+				}
+			}
+		}
+		throw new LispBuiltinException(
+				"greater error: should both be an integer");
 	}
 }

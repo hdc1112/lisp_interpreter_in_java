@@ -109,6 +109,8 @@ public class UnitTest {
 			// e.printStackTrace();
 			throw new RuntimeException("LispBuiltin_eqTest failed");
 		}
+
+		// evaluation test is as follows
 	}
 
 	private static boolean SExptoStringTest(SExp se, String e) {

@@ -14,6 +14,8 @@ import java.util.List;
  * huangda@cse.ohio-state.edu
  */
 public class SExp {
+	// warning: if you want to check these flags
+	// do it in order !
 	private boolean isAtom;
 
 	// if isAtom == false
@@ -29,6 +31,9 @@ public class SExp {
 	// we only use capital letter in this prj
 	public static String NIL_name = "NIL";
 	public static String T_name = "T";
+	public static String QUOTE_name = "QUOTE";
+	public static String COND_name = "COND";
+	public static String DEFUN_name = "DEFUN";
 	// if isNum == true
 	private int value;
 
@@ -99,29 +104,6 @@ public class SExp {
 	// warning: any identifier should be added into this
 	// warning: only contains identifier, no non-atoms
 	private static List<SExp> IDPOINTERS = new ArrayList<SExp>();
-	static {
-		// add some id's into idPointers
-		// once they are added, there is no reason to
-		// delete them in one run.
-		// it is really a necessity to add them at the beginning
-		// of everything, because many code rely on this fact.
-
-		// these id's are T and NIL
-		SExp s_nil = new SExp();
-		s_nil.setAtom(true).setNum(false).setName(SExp.NIL_name);
-		IDPOINTERS.add(s_nil);
-		SExp s_t = new SExp();
-		s_t.setAtom(true).setNum(false).setName(SExp.T_name);
-		IDPOINTERS.add(s_t);
-
-		// these id's come from lispbuiltin functions
-		for (int i = 0; i < LispBuiltin.BUILTINIDENTIFIERS.length; i++) {
-			SExp s = new SExp();
-			s.setAtom(true).setNum(false)
-					.setName(LispBuiltin.BUILTINIDENTIFIERS[i]);
-			IDPOINTERS.add(s);
-		}
-	}
 
 	// only search the IDPOINTERS, and return it if found, return null
 	// if it doesn't exisit

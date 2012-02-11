@@ -10,13 +10,54 @@ import java.io.IOException;
  * huangda@cse.ohio-state.edu
  */
 public class LispInterpreter {
+	// the global defun-list
+	// built-in functions are not here
+	// each time (defun is called, some function is added into this
+	public static SExp dlist;
+
+	private static void init_IDPOINTERS() {
+		// add some id's into idPointers
+		// once they are added, there is no reason to
+		// delete them in one run.
+		// it is really a necessity to add them at the beginning
+		// of everything, because many code rely on this fact.
+		// it is very dangerous to directly add sth. to List
+		// without first checking whether it is already in it,
+		// and without checking whether it is capital letters
+		// it is highly recommended that alwasy use _getIdSExp
+		// if you will add sth, and use getIdSExp for only fetch sth.
+
+		// these id's are T and NIL
+		SExp._getIdSExp(SExp.NIL_name);
+		SExp._getIdSExp(SExp.T_name);
+
+		// these id's are QUOTE, COND, DEFUN
+		SExp._getIdSExp(SExp.QUOTE_name);
+		SExp._getIdSExp(SExp.COND_name);
+		SExp._getIdSExp(SExp.DEFUN_name);
+
+		// these id's come from lispbuiltin functions
+		for (int i = 0; i < LispBuiltin.BUILTINIDENTIFIERS.length; i++) {
+			SExp._getIdSExp(LispBuiltin.BUILTINIDENTIFIERS[i]);
+		}
+	}
+
+	public static void init() {
+		init_IDPOINTERS();
+	}
 
 	public static void main(String[] args) {
+		// Lisp Interpreter Initialization
+		// vital code
+		init();
+
 		// self test, you can comment these following lines.
 		System.out.println("self test");
 		UnitTest.test();
 
+		// now we roll
 		int exp_num = 1;
+		dlist = SExp.getNIL();
 		while (true) {
 			// test cases for input
 			// 1) 23 passed
@@ -44,13 +85,43 @@ public class LispInterpreter {
 			// 23) A passed
 			// 24) (A 23 (A . 3)) passed
 			// 25) (A . B) passed
+			//
 			// test cases for evaluation
-			// 1)
+			// 26) 23 passed
+			// 27) a "only capital letter is allowed"
+			// 28) A "unbound identifer A"
+			// 29) (2 3) "function name should start with capital letter"
+			// 30) (A 3) "function not defined: A"
+			// 31) (QUOTE (2 3 3 3 3)) passed
+			// 32) (COND (T NIL)) passed
+			// 33) (COND (NIL T) (T NIL)) passed
+			// 34) (COND (NIL T ) ( T T)) passed
+			// 35) (COND A) "car error: shouldn't be an atom "
+			// 36) (COND (A NIL)) " unbound identifer A"
+			// 37) (COND (NIL NIL))
+			// "there should be at least one condition which is true"
+			// 38) (2 . 3) "illegal function call format"
+			// 39) (2 3) "function name should start with capital letter"
+			// 40) (2 . (3 . NIL))
+			// "function name should start with capital letter"
+			// 41) (CAR (2 . 3)) "illegal function call format"
+			// 42) (CAR (QUOTE (2 . 3))) passed
+			// 43) (EQ (QUOTE A) (QUOTE A)) passed
+			// 44) (PLUS 222 -90) passed
+			// 45) (MINUS 222 -90) passed
+			// 46) (LESS 2 (QUOTE A)) "should both be an integer"
+			// 47) (LESS (QUOTE 2) (QUOTE 3)) passed
+			// 48) (COND (T NIL)) passed
+			// 49) (COND (NIL T)) "at least one condition should true"
 			try {
 				// clisp style. even wrong exp, we +1
 				System.out.printf("[%d]>", exp_num++);
+				// 1st, user input
 				SExp se = Input.input();
+				// optional, output this input, usually for debug purpose
 				SExp.SExpPrintOut(se);
+				// 2nd, output the evaluation result
+				SExp.SExpPrintOut(Evaluate.eval(se, SExp.getNIL(), dlist));
 			} catch (InputException e) {
 				// TODO Auto-generated catch block
 				// e.printStackTrace();
@@ -58,6 +129,14 @@ public class LispInterpreter {
 				// we have to continue after this exception
 				System.out.println(e);
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				// e.printStackTrace();
+				System.out.println(e);
+			} catch (EvaluateException e) {
+				// TODO Auto-generated catch block
+				// e.printStackTrace();
+				System.out.println(e);
+			} catch (LispBuiltinException e) {
 				// TODO Auto-generated catch block
 				// e.printStackTrace();
 				System.out.println(e);
