@@ -48,7 +48,7 @@ public class Input {
 							skipToken();
 						else {
 							_flush();
-							throw new InputException("input error: missing ) .");
+							throw new InputException("input error: missing ) ");
 						}
 					} else {
 						// we don't skip anything, just
@@ -64,7 +64,18 @@ public class Input {
 				}
 			}
 		} else if (t.type == Token.IDENTIFIER) {
-			throw new RuntimeException("not implemented 2.");
+			// throw new RuntimeException("not implemented 2.");
+			// now I implement Identifier, it's very similar with number
+			// unlike number, I don't create new identifier object onece
+			// there is such one.
+			SExp s = SExp._getIdSExp(t.value);
+			if (t.right_parenthesis_prefetched == false) {
+				skipToken();
+			} else {
+				current.type = Token.RIGHT_PARENTHESIS;
+				current.right_parenthesis_prefetched = false;
+			}
+			return s;
 		} else if (t.type == Token.INTEGER) {
 			// skipToken(); // we can't skip here, because we want to use it.
 			// when we encounter a number, we just create a new SExp.
@@ -107,7 +118,7 @@ public class Input {
 			return SExp.getNIL();
 		} else if (t.type == Token.DOT) {
 			_flush();
-			throw new InputException("input2 error: meets a unwelcome dot.");
+			throw new InputException("input2 error: meets a unwelcome dot");
 		} else {
 			return LispBuiltin.cons(input(), input2());
 		}
@@ -161,7 +172,7 @@ public class Input {
 						_flush();
 						throw new InputException(
 								"ckNextToken error: illegal digit after "
-										+ (char) c + " .");
+										+ (char) c);
 					} else {
 						value = c - '0';
 					}
@@ -203,27 +214,58 @@ public class Input {
 						_flush();
 						throw new InputException(
 								"ckNextToken error: illegal digit after "
-										+ value + " .");
+										+ value);
 					}
 				}
 			} else if (isCapitalLetter(c)) {
-				throw new RuntimeException("not implemented yet.");
+				// throw new RuntimeException("not implemented yet.");
+				// once you have a correct integer input code,
+				// it's very easy to write a identifer input code.
+				StringBuffer sb = new StringBuffer();
+				sb.append((char) c);
+				while (true) {
+					c = System.in.read();
+					if (c == ' ' || c == '\t' || c == '\n' || c == 13
+							|| c == ')') {
+						// we have finished a identifer
+						// now create a Toekn
+						Token t = new Token();
+						t.type = Token.IDENTIFIER;
+						t.value = sb.toString();
+						current = t;
+						if (c == ')') {
+							t.right_parenthesis_prefetched = true;
+						}
+						return t;
+					} else if (isCapitalLetter(c) || isDigit(c)) {
+						sb.append((char) c);
+					} else {
+						_flush();
+						if (isLowercaseLetter(c)) {
+							throw new InputException(
+									"only capital letter is allowed ");
+						} else {
+							throw new InputException(
+									"ckNextToken error: illegal character "
+											+ (char) c);
+						}
+					}
+				}
 			} else {
 				_flush();
 				// I try to be nice to user
 				if (isLowercaseLetter(c)) {
-					throw new InputException("only capital letter is allowed .");
+					throw new InputException("only capital letter is allowed");
 				} else {
 					throw new InputException(
-							"ckNextToken error: illegal character " + (char) c
-									+ " .");
+							"ckNextToken error: illegal character " + (char) c);
 				}
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			// if read error, we can do nothing
-			throw new RuntimeException("System.in.read() error.");
+			throw new RuntimeException("System.in.read() error");
 		}
 	}
 
@@ -285,6 +327,8 @@ public class Input {
 		// reached to an end. so if it's like 23) ab), then
 		// must make this flag true. then after input has read
 		// the data, we make it a ) token.
+		// default is false, so we can ignore this if nothing special
+		// happened.
 		boolean right_parenthesis_prefetched = false;
 
 	}

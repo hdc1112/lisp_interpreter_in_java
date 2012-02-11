@@ -13,7 +13,7 @@ public class LispInterpreter {
 
 	public static void main(String[] args) {
 		// self test, you can comment these following lines.
-		System.out.println("self test.");
+		System.out.println("self test");
 		UnitTest.test();
 
 		int exp_num = 1;
@@ -41,6 +41,9 @@ public class LispInterpreter {
 			// 20) (23 ] passed (should fail, and should restart normally)
 			// 21) (2 5 6 7 1 \n 23 (2 . 4) 3 (4 5) \n ) passed
 			// 22) if SExp is a List, then Print in list notation. passed
+			// 23) A passed
+			// 24) (A 23 (A . 3)) passed
+			// 25) (A . B) passed
 			// test cases for evaluation
 			// 1)
 			try {
