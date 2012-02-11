@@ -6,6 +6,9 @@ import java.util.List;
  * SExp.java 
  * Lisp's s-exp class
  * important basis, used by everyone
+ * inside SExp.java, we use member function
+ * outside SExp.java, we use LispBuiltin.java
+ * as the first choice
  * 
  * Dachuan Huang
  * huangda@cse.ohio-state.edu
@@ -198,9 +201,13 @@ public class SExp {
 				sb.append(name);
 			}
 		} else {
-			// if(isList(this))
-			// else
-			sb.append("(" + left + " . " + right + ")");
+			// warning: NIL won't get here.
+			// exactly what I want. NIL just print NIL. not ()
+			if (isList(this)) {
+				return SExp.SExpPrintList_excluding_NIL(this);
+			} else {
+				sb.append("(" + left + " . " + right + ")");
+			}
 		}
 		return sb.toString();
 	}
@@ -210,6 +217,34 @@ public class SExp {
 	}
 
 	// isList
-	// public static boolean isList(SExp s) {}
+	// warning: NIL is a list
+	public static boolean isList(SExp s) {
+		if (s == SExp.getNIL()) {
+			return true;
+		} else if (s.isAtom() == true) {
+			return false;
+		} else {
+			return isList(s.getRight());
+		}
+	}
 
+	// warning: called after isList(s) == true and s is not NIL
+	// this ugly code is only because car(NIL) and cdr(NIL) is illegal.
+	// in clisp, car(NIL) and cdr(NIL) is both NIL, that's easier
+	// but I must stick to the requirement
+	private static String SExpPrintList_excluding_NIL(SExp s) {
+		return "(" + _printlist(s, new StringBuffer()).toString();
+	}
+
+	// only called by the above one
+	private static StringBuffer _printlist(SExp s, StringBuffer sb) {
+		sb.append(s.getLeft());
+		if (s.getRight() == SExp.getNIL()) {
+			sb.append(')');
+			return sb;
+		}
+		sb.append(' ');
+		sb.append(_printlist(s.getRight(), new StringBuffer()));
+		return sb;
+	}
 }

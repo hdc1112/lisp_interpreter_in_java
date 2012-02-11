@@ -18,7 +18,7 @@ public class UnitTest {
 		} else {
 			// if self test failed, we don't need
 			// to run anymore, so RuntimeException is thrown
-			throw new RuntimeException("SExptoStringTest failed");
+			throw new RuntimeException("SExptoStringTest failed.");
 		}
 
 		// SExptoStringTest
@@ -27,7 +27,7 @@ public class UnitTest {
 		if (true == SExptoStringTest(s2, "ab")) {
 			System.out.println("SExptoStringTest passed.");
 		} else {
-			throw new RuntimeException("SExptoStringTest failed");
+			throw new RuntimeException("SExptoStringTest failed.");
 		}
 
 		// SExptoStringTest. have used the above two instances.
@@ -36,12 +36,62 @@ public class UnitTest {
 		if (true == SExptoStringTest(s3, "(23 . ab)")) {
 			System.out.println("SExptoStringTest passed.");
 		} else {
-			throw new RuntimeException("SExptoStringTest failed");
+			throw new RuntimeException("SExptoStringTest failed.");
+		}
+
+		// SExpisListTest
+		if (true == SExpisListTest(SExp.getNIL(), true)) {
+			System.out.println("SExpisListTest passed.");
+		} else {
+			throw new RuntimeException("SExpisListTest failed.");
+		}
+
+		// SExpisListTest
+		SExp s4 = new SExp();
+		s4.setAtom(false).setLeft(s3).setRight(SExp.getNIL());
+		if (true == SExpisListTest(s4, true)) {
+			System.out.println("SExpisListTest passed.");
+		} else {
+			throw new RuntimeException("SExpisListTest failed.");
+		}
+
+		// SExpisListTest
+		SExp s5 = new SExp();
+		s5.setAtom(false).setLeft(s3).setRight(s4);
+		if (true == SExpisListTest(s5, true)) {
+			System.out.println("SExpisListTest passed.");
+		} else {
+			throw new RuntimeException("SExpisListTest failed.");
+		}
+
+		// SExpisListTest
+		if (true == SExpisListTest(s1, false)) {
+			System.out.println("SExpisListTest passed.");
+		} else {
+			throw new RuntimeException("SExpisListTest failed.");
+		}
+
+		// List toString Test
+		if (true == List_excluding_NIL_PrintTest(s4, "((23 . ab))")) {
+			System.out.println("List_excluding_NIL_printTest passed.");
+		} else {
+			throw new RuntimeException("List_excluding_NIL_printTest failed.");
 		}
 	}
 
 	private static boolean SExptoStringTest(SExp se, String e) {
 		int r = se.toString().compareTo(e);
 		return r == 0 ? true : false;
+	}
+
+	private static boolean SExpisListTest(SExp s, boolean islist) {
+		return (SExp.isList(s) == islist) ? true : false;
+	}
+
+	private static boolean List_excluding_NIL_PrintTest(SExp s, String expect) {
+		if (SExp.isList(s) == false || s == SExp.getNIL()) {
+			throw new RuntimeException("ListPrintTest failed. param is wrong.");
+		}
+		return s.toString().equals(expect) ? true : false;
 	}
 }

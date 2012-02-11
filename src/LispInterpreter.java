@@ -40,6 +40,7 @@ public class LispInterpreter {
 			// 19) <23 passed (should fail, and should restart normally)
 			// 20) (23 ] passed (should fail, and should restart normally)
 			// 21) (2 5 6 7 1 \n 23 (2 . 4) 3 (4 5) \n ) passed
+			// 22) if SExp is a List, then Print in list notation. passed
 			// test cases for evaluation
 			// 1)
 			try {

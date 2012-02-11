@@ -47,6 +47,7 @@ public class Input {
 						if (t.type == Token.RIGHT_PARENTHESIS)
 							skipToken();
 						else {
+							_flush();
 							throw new InputException("input error: missing ) .");
 						}
 					} else {
