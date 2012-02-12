@@ -151,7 +151,7 @@ public class LispInterpreter {
 				// 1st, user input
 				SExp se = Input.input();
 				// optional, output this input, usually for debug purpose
-				SExp.SExpPrintOut(se);
+				// SExp.SExpPrintOut(se);
 				// 2nd, output the evaluation result
 				SExp.SExpPrintOut(Evaluate.eval(se, SExp.getNIL(), dlist));
 			} catch (InputException e) {
