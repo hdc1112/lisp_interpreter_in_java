@@ -81,9 +81,9 @@ public class LispBuiltin implements LispBuiltin_Names {
 		// we just compare the reference,
 		// because there is an assumption, that for every identifier
 		// there is only one corresponding instance in IDPOINTERS
-		if (SExp.isT(atom(s)) == false) {
-			throw new LispBuiltinException("null error: should be an atom");
-		}
+		// if (SExp.isT(atom(s)) == false) {
+		// throw new LispBuiltinException("null error: should be an atom");
+		// }
 		return s == SExp.getNIL() ? SExp.getT() : SExp.getNIL();
 	}
 

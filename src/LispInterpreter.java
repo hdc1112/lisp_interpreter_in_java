@@ -113,6 +113,28 @@ public class LispInterpreter {
 			// 47) (LESS (QUOTE 2) (QUOTE 3)) passed
 			// 48) (COND (T NIL)) passed
 			// 49) (COND (NIL T)) "at least one condition should true"
+			// test cases for (defun.
+			// 50) (DEFUN APPEND (L1 L2) (COND ((NULL L1) L2) (T (CONS (CAR L1)
+			// (APPEND (CDR L1) L2))))) passed
+			// 51) (APPEND (QUOTE (2)) (QUOTE (2))) passed
+			// 52) (DEFUN XMEMB (X LIST) (COND ((NULL LIST) NIL) ((EQ X (CAR
+			// LIST)) T) (T (XMEMB X (CDR LIST))))) passed
+			// 53) (XMEMB 2 (QUOTE (2 3))) passed
+			// 54) (DEFUN XMEMB (X LIST) (COND ((NULL LIST) NIL) ((EQ X (CAR
+			// LIST)) T) (T (XMEMB X (CDR LIST))))) passed
+			// 55) (XUNION (QUOTE (3 4)) (QUOTE (4 5))) passed
+			// 56) (DEFUN EQUAL (X Y) (COND ((ATOM X) (COND ((ATOM Y) (EQ X Y))
+			// (T NIL))) ((ATOM Y) NIL) ((EQUAL (CAR X) (CAR Y)) (EQUAL (CDR X)
+			// (CDR Y))) (T NIL))) passed
+			// 57) (EQUAL (QUOTE (2 . 3)) (QUOTE (2 . 3))) passed
+			// 58) (DEFUN ATOMSLIST (S) (COND ((NULL S) NIL) ((ATOM S) (CONS S
+			// NIL)) (T (APPEND (ATOMSLIST (CAR S)) (ATOMSLIST (CDR S))))))
+			// passed
+			// 59) (ATOMSLIST (QUOTE ((2 . 3) . 4))) passed
+			// 60) (DEFUN CHECK2 (S) (COND ((NULL S) NIL) ((XMEMB (CAR S) (CDR
+			// S)) T) (T (CHECK2 (CDR S)) ) )) passed
+			// 61) (DEFUN CHECK (S) (CHECK2 (ATOMSLIST S))) passed
+			// 62) (CHECK (QUOTE ((2 . 3) . 2))) passed
 			try {
 				// clisp style. even wrong exp, we +1
 				System.out.printf("[%d]>", exp_num++);
