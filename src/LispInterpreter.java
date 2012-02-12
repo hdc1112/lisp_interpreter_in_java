@@ -42,8 +42,18 @@ public class LispInterpreter {
 		}
 	}
 
+	private static void welcome() {
+		System.out.println("Lisp Interpreter, written in Java");
+		System.out.println("Dachuan Huang");
+		System.out.println("huangda@cse.ohio-state.edu");
+		System.out.println("02/11/2012");
+		System.out.println("Copyright (c) Dachuan Huang");
+		System.out.println("Press Ctrl+C to exit");
+	}
+
 	public static void init() {
 		init_IDPOINTERS();
+		welcome();
 	}
 
 	public static void main(String[] args) {
@@ -52,8 +62,8 @@ public class LispInterpreter {
 		init();
 
 		// self test, you can comment these following lines.
-		System.out.println("self test");
-		UnitTest.test();
+		// System.out.println("self test");
+		// UnitTest.test();
 
 		// now we roll
 		int exp_num = 1;
