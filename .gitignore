@@ -1,5 +1,6 @@
 .classpath
 *.class
 *.jar
+manifest.txt
 .settings/
 *~
