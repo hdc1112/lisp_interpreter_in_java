@@ -10,7 +10,9 @@ import java.util.List;
  * outside SExp.java, we use LispBuiltin.java
  * as the first choice
  * 
- * Dachuan Huang
+ * Copyright (c) 2012 Dachuan Huang
+ * 
+ * Author: Dachuan Huang
  * huangda@cse.ohio-state.edu
  */
 public class SExp {

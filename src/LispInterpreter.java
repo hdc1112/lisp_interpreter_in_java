@@ -6,7 +6,9 @@ import java.io.IOException;
  * also the main entry
  * it has Input & Evaluator, two components
  * 
- * Dachuan Huang
+ * Copyright (c) 2012 Dachuan Huang
+ * 
+ * Author: Dachuan Huang
  * huangda@cse.ohio-state.edu
  */
 public class LispInterpreter {

@@ -3,7 +3,9 @@
  * called before everything
  * only used by LispInterpreter.java
  * 
- * Dachuan Huang
+ * Copyright (c) 2012 Dachuan Huang
+ * 
+ * Author: Dachuan Huang
  * huangda@cse.ohio-state.edu
  */
 public class UnitTest {

@@ -5,7 +5,9 @@ import java.io.IOException;
  * 1st component, Input
  * only used by LispInterpreter.java
  * 
- * Dachuan Huang
+ * Copyright (c) 2012 Dachuan Huang
+ * 
+ * Author: Dachuan Huang
  * huangda@cse.ohio-state.edu
  */
 class InputException extends Exception {

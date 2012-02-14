@@ -5,7 +5,9 @@
  * e.g. cons() --> (cons 2 3)
  * used by SExp, Evaluator
  * 
- * Dachuan Huang
+ * Copyright (c) 2012 Dachuan Huang
+ * 
+ * Author: Dachuan Huang
  * huangda@cse.ohio-state.edu
  */
 class LispBuiltinException extends Exception {

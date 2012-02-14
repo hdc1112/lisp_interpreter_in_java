@@ -3,7 +3,9 @@
  * 2nd component, Evaluator
  * only used by LispInterpreter.java
  * 
- * Dachuan Huang
+ * Copyright (c) 2012 Dachuan Huang
+ * 
+ * Author: Dachuan Huang
  * huangda@cse.ohio-state.edu
  */
 class EvaluateException extends Exception {
@@ -298,7 +300,8 @@ public class Evaluate implements LispBuiltin_Names {
 					// be extremely careful about here
 					// any identifier can be used to define a new function
 					// which means you can change T or NIL or built-in's
-					// functions, (I can modify this code to not let this happen)
+					// functions, (I can modify this code to not let this
+					// happen)
 					// but to imitate clisp, I don't allow quote, cond, defun
 					// to be a customized function's name.
 					// (actually clisp alows defun to be a new function's name
