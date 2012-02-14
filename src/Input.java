@@ -153,6 +153,36 @@ public class Input {
 				current = t;
 				return t;
 			} else if (c == '.') {
+				// it's a little different here
+				// what follows a '.' must be a white space
+				// otherwise (QUOTE (2 .3)) will be seen as a
+				// legal expression, in fact it's not
+				// so read a character, this action won't
+				// interfere the ckNextToken() next.
+				// code purely for fault-detection
+				c = System.in.read();
+				if (c != ' ') {
+					_flush();
+					// again, I try to be nice to user
+					if (isDigit(c) == true) {
+						throw new InputException(
+								"ckNextToken error: we don't support floating number,"
+										+ " please add a white space before number");
+					}
+					throw new InputException(
+							"ckNextToken error: there should be a white space after '.'");
+				}
+				// and also be careful, that if in the future
+				// I want to support floating number, then '.'
+				// has two meanings, 1st for floating number and 2nd for
+				// (A . B) so some changes must be made when
+				// reading a '.', we should continue reading, if it's really
+				// a floating number, then return a number Token; if it's
+				// not a white space then wrong; if it's a white space
+				// then return a dot Token.
+				// and when reading a number, we also need to
+				// make some changes, because '.' can be met legally.
+				// just for future maintenance.
 				Token t = new Token();
 				t.type = Token.DOT;
 				t.value = ".";

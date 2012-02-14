@@ -145,6 +145,12 @@ public class LispInterpreter {
 			// S)) T) (T (CHECK2 (CDR S)) ) )) passed
 			// 61) (DEFUN CHECK (S) (CHECK2 (ATOMSLIST S))) passed
 			// 62) (CHECK (QUOTE ((2 . 3) . 2))) passed
+			//
+			// random test, pressure test
+			// 63) (QUOTE (2 .3)) found a bug. fixed on 2/14/2012
+			// 64) (.3) "we don't support floating number"
+			// 65) .3 "we don't support floating number"
+			// 66) (QUOTE (A .B)) "there should be a white space after '.'"
 			try {
 				// clisp style. even wrong exp, we +1
 				System.out.printf("[%d]>", exp_num++);
