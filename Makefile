@@ -9,7 +9,7 @@
 # Author: Dachuan Huang
 # huangda@cse.ohio-state.edu
 
-.PHONY: compile run clean jar
+.PHONY: compile jar run-io run clean
 
 BIN = ./bin/
 SRC = ./src/
