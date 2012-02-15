@@ -1,6 +1,7 @@
 # makefile for the lisp interpreter project
 # typical use: make (or make compile, compile is the first target, so it's the default target) ; 
-# then make run (or make run-io, if input&output mode is what you want)
+# then make run (or make run-evaloff, if input&output mode is what you want,
+# or even make evaloff-listprintoff, if you want to forbid list printing)
 # other use:   make jar     ; make clean
 # the eclipse project folder structure is kept on purpose
 #
@@ -9,7 +10,7 @@
 # Author: Dachuan Huang
 # huangda@cse.ohio-state.edu
 
-.PHONY: compile jar run-io run clean pre
+.PHONY: compile jar run-evaloff-listprintoff run-evaloff run-listprintoff run clean pre
 
 BIN = ./bin/
 SRC = ./src/
@@ -25,7 +26,8 @@ JARNAME = $(MAINCLASS).jar
 MANIFEST = manifest.txt
 
 JAVA = java
-INPUTOUTPUTMODE = inputoutput
+EVALOFF = inputoutput
+LISTPRINTOFF = nolistprint
 
 compile: pre
 	cd $(SRC); $(JAVAC) $(JAVAFLAGS) *.java 
@@ -33,8 +35,15 @@ compile: pre
 jar: 
 	cd $(BIN); $(JAR) $(JARFLAGS) $(JARNAME) ../$(MANIFEST) *.class; mv $(JARNAME) ../
 
-run-io:
-	cd $(BIN); $(JAVA) $(MAINCLASS) $(INPUTOUTPUTMODE)
+run-evaloff-listprintoff:
+	cd $(BIN); $(JAVA) $(MAINCLASS) $(EVALOFF) $(LISTPRINTOFF)
+
+run-evaloff:
+	cd $(BIN); $(JAVA) $(MAINCLASS) $(EVALOFF)
+
+# not commonly used
+run-listprintoff:
+	cd $(BIN); $(JAVA) $(MAINCLASS)            $(LISTPRINTOFF)
 
 run:
 	cd $(BIN); $(JAVA) $(MAINCLASS)
@@ -44,3 +53,7 @@ clean:
 
 pre:
 	if test -d $(BIN); then true; else mkdir $(BIN); fi 
+
+# just because it's too boring to type run-evaloff-listprintoff
+# to ***grader***, run this to test the first part of this project!
+run-1stpart: run-evaloff-listprintoff

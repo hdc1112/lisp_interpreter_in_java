@@ -1,16 +1,22 @@
 Dachuan Huang
 huangda@cse.ohio-state.edu
 
-1. how to use the interpreter?
+1. how to use the interpreter? 
 
 make (or make compile)
 ::: to compile the whole program
-::: make sure that you've compiled before other work
+::: make sure that you do this after you modify the source code!
 
-make run-io
-::: to run the interpreter in input&output mode
+make run (in default, it is in eval mode & list printing is on)
+::: to run the interpreter 
 
-make run
+make run-1stpart (to ***grader***, you only need to type this to test the first part of this project, thanks)
+::: to run the interpreter in input&eval mode, and list printing is forbidden
+
+make run-evaloff-listprintoff
+::: to run the interpreter in input&eval mode, and list printing is forbidden
+
+make run-evaloff
 ::: to run the interpreter in input&eval mode
 
 make jar

@@ -294,7 +294,6 @@ public class Input {
 				}
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			// if read error, we can do nothing
 			throw new RuntimeException("System.in.read() error");
@@ -362,6 +361,5 @@ public class Input {
 		// default is false, so we can ignore this if nothing special
 		// happened.
 		boolean right_parenthesis_prefetched = false;
-
 	}
 }

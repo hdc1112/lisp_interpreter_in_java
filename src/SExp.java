@@ -187,7 +187,7 @@ public class SExp {
 		} else {
 			// warning: NIL won't get here.
 			// exactly what I want. NIL just print NIL. not ()
-			if (isList(this)) {
+			if ((Gconfig.mode & Gconfig.LISTPRINTOFFMODE) == 0 && isList(this)) {
 				return SExp.SExpPrintList_excluding_NIL(this);
 			} else {
 				sb.append("(" + left + " . " + right + ")");

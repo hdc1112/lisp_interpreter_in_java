@@ -11,6 +11,46 @@ import java.io.IOException;
  * Author: Dachuan Huang
  * huangda@cse.ohio-state.edu
  */
+
+//global configuration class
+//to control the behavior of interpreter
+//I admit this class is ugly
+//but in this small prj, I don't want to use
+//some command line parsing library to bluff
+class Gconfig {
+	// default configuration: every bit is cleared
+	public static int mode = 0x0;
+
+	// input&output mode: only input and output the s-exp
+	public static int EVALOFFMODE = 0x1;
+	private static String EVALOFFOPT = "evaloff";
+	// "don't print list notation" mode
+	public static int LISTPRINTOFFMODE = 0x2;
+	private static String LISTPRINTOFFOPT = "listprintoff";
+
+	// only called by LispInterpreter's init()
+	public static void init_mode(String[] args) {
+		for (int i = 0; i < args.length; i++) {
+			if (args[i].equals(EVALOFFOPT) == true) {
+				mode |= EVALOFFMODE;
+			} else if (args[i].equals(LISTPRINTOFFOPT) == true) {
+				mode |= LISTPRINTOFFMODE;
+			}
+		}
+	}
+
+	// only called by LispInterpreter's welcome()
+	public static void welcome() {
+		if ((mode & EVALOFFMODE) != 0) {
+			System.out.println("Warning: You are in Input & Output mode, "
+					+ "this mode is only used for debug or test");
+		}
+		if ((mode & LISTPRINTOFFMODE) != 0) {
+			System.out.println("Warning: list notation printing is turned off");
+		}
+	}
+}
+
 public class LispInterpreter {
 	// the global defun-list
 	// built-in functions are not here
@@ -51,29 +91,12 @@ public class LispInterpreter {
 		System.out.println("02/11/2012");
 		System.out.println("Copyright (c) Dachuan Huang");
 		System.out.println("Press Ctrl+C to exit");
-		if (mode == INPUTOUTPUTMODE) {
-			System.out.println("Warning: You are in Input & Output mode, "
-					+ "this mode is only used for debug or test");
-		}
-	}
-
-	// mode control
-	// input&eval mode: the complete and default mode
-	// input&output mode: only input and output the s-exp
-	private static int INPUTEVALMODE = 0;
-	private static int INPUTOUTPUTMODE = 1;
-	private static String INPUTOUTPUTOPTION = "inputoutput";
-	private static int mode = INPUTEVALMODE;
-
-	private static void init_mode(String[] args) {
-		if (args.length == 1 && args[0].equals(INPUTOUTPUTOPTION) == true) {
-			mode = INPUTOUTPUTMODE;
-		}
+		Gconfig.welcome();
 	}
 
 	private static void init(String[] args) {
 		init_IDPOINTERS();
-		init_mode(args);
+		Gconfig.init_mode(args);
 		welcome();
 	}
 
@@ -177,7 +200,7 @@ public class LispInterpreter {
 				System.out.printf("[%d]>", exp_num++);
 				// 1st, user input
 				SExp se = Input.input();
-				if (mode == INPUTOUTPUTMODE) {
+				if ((Gconfig.mode & Gconfig.EVALOFFMODE) != 0) {
 					// optional, output this input, usually for debug purpose
 					SExp.SExpPrintOut(se);
 				} else {
@@ -185,25 +208,20 @@ public class LispInterpreter {
 					SExp.SExpPrintOut(Evaluate.eval(se, SExp.getNIL(), dlist));
 				}
 			} catch (InputException e) {
-				// TODO Auto-generated catch block
-				// e.printStackTrace();
 				// we print everything to stdout
+				// e.printStackTrace();
 				// we have to continue after this exception
 				System.out.println(e);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				// e.printStackTrace();
 				System.out.println(e);
 			} catch (EvaluateException e) {
-				// TODO Auto-generated catch block
 				// e.printStackTrace();
 				System.out.println(e);
 			} catch (LispBuiltinException e) {
-				// TODO Auto-generated catch block
 				// e.printStackTrace();
 				System.out.println(e);
 			}
-
 		}
 	}
 }

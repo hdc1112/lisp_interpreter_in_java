@@ -90,7 +90,6 @@ public class UnitTest {
 				throw new RuntimeException("LispBuiltin_eqTest failed");
 			}
 		} catch (LispBuiltinException e) {
-			// TODO Auto-generated catch block
 			// e.printStackTrace();
 			throw new RuntimeException("LispBuiltin_eqTest failed");
 		}
@@ -107,7 +106,6 @@ public class UnitTest {
 				throw new RuntimeException("LispBuiltin_eqTest failed");
 			}
 		} catch (LispBuiltinException e) {
-			// TODO Auto-generated catch block
 			// e.printStackTrace();
 			throw new RuntimeException("LispBuiltin_eqTest failed");
 		}
