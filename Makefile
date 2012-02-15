@@ -26,8 +26,8 @@ JARNAME = $(MAINCLASS).jar
 MANIFEST = manifest.txt
 
 JAVA = java
-EVALOFF = inputoutput
-LISTPRINTOFF = nolistprint
+EVALOFF = evaloff
+LISTPRINTOFF = listprintoff
 
 compile: pre
 	cd $(SRC); $(JAVAC) $(JAVAFLAGS) *.java 
