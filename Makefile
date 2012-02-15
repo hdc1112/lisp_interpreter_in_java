@@ -18,7 +18,7 @@ MAINCLASS = LispInterpreter
 
 
 JAVAC = javac
-JAVAFLAGS = -d ../bin/
+JAVAFLAGS = -d ../$(BIN)/
 
 JAR = jar
 JARFLAGS = cvfm
@@ -32,7 +32,7 @@ compile:
 	cd $(SRC); $(JAVAC) $(JAVAFLAGS) *.java 
 
 jar:
-	$(JAR) $(JARFLAGS) $(JARNAME) $(MANIFEST) $(BIN)/*.class
+	cd $(BIN); $(JAR) $(JARFLAGS) $(JARNAME) ../$(MANIFEST) *.class; mv $(JARNAME) ../
 
 run-io:
 	cd $(BIN); $(JAVA) $(MAINCLASS) $(INPUTOUTPUTMODE)
