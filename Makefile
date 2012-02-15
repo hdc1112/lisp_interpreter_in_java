@@ -9,13 +9,12 @@
 # Author: Dachuan Huang
 # huangda@cse.ohio-state.edu
 
-.PHONY: compile jar run-io run clean
+.PHONY: compile jar run-io run clean pre
 
 BIN = ./bin/
 SRC = ./src/
 
 MAINCLASS = LispInterpreter
-
 
 JAVAC = javac
 JAVAFLAGS = -d ../$(BIN)/
@@ -28,17 +27,20 @@ MANIFEST = manifest.txt
 JAVA = java
 INPUTOUTPUTMODE = inputoutput
 
-compile: 
+compile: pre
 	cd $(SRC); $(JAVAC) $(JAVAFLAGS) *.java 
 
-jar:
+jar: 
 	cd $(BIN); $(JAR) $(JARFLAGS) $(JARNAME) ../$(MANIFEST) *.class; mv $(JARNAME) ../
 
 run-io:
 	cd $(BIN); $(JAVA) $(MAINCLASS) $(INPUTOUTPUTMODE)
 
-run: 
+run:
 	cd $(BIN); $(JAVA) $(MAINCLASS)
 
 clean:
 	rm -rf $(BIN)/*; rm -rf $(JARNAME); rm -rf *~
+
+pre:
+	if test -d $(BIN); then true; else mkdir $(BIN); fi 

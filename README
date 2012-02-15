@@ -5,6 +5,7 @@ huangda@cse.ohio-state.edu
 
 make (or make compile)
 ::: to compile the whole program
+::: make sure that you've compiled before other work
 
 make run-io
 ::: to run the interpreter in input&output mode
@@ -21,6 +22,8 @@ make clean
 2. what are the files in the project?
 
 the folder is a eclipse project folder, which means I developed it in eclipse, and you can import it to eclipse
+you can also git clone this project:
+git clone git://github.com/hdc1112/lisp_interpreter_in_java.git
 
 .
 ├── bin				*.class files will go here
