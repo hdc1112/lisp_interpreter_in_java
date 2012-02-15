@@ -1,0 +1,113 @@
+Dachuan Huang
+huangda@cse.ohio-state.edu
+
+this is a design and documentation file.
+
+as I understand, lisp interpreter consists of two main components: 1st, Input; 2nd, Evaluate.
+
+1) Input
+the essential part of Input component is to read character string from stdin, but how to process it? how to recognize that whether it is a legal S-Exp or not? how to read mixed notation in lisp(I mean, dot-notation or list-notation or both of them appear in input)?
+
+these questions' answers are in the following pseudo code which catch the essence:
+
+(excerpted from newsgroup)
+Let us say ckNextToken returns 1, 2, 3, or 4
+corresponding respectively to the four token types, "(", ")", ".", and
+identifeir.
+
+   input[] = [ eq[ckNextToken[],4] --> getIdToken[];
+                | eq[ckNextToken[],1] --> cons[input[], input[]];
+                | T --> error!
+                ]
+
+   input2[] = [ eq[ckNextToken[],2] --> NIL;
+              | T --> cons[input[], input2[]]; ]
+
+after my thinking, I put this in my way:
+   
+   input() {
+      ckNextToken();
+      if(token = '(') {
+         skip '('
+         ckNextToken();
+         if (token = ')') {
+            skip ')'
+            return NIL
+         } else {
+            SExp left = input();
+            ckNextToken();
+            if (token == '.') {
+               skip '.'
+               ckNextToken()
+               return (left . input())
+            } else {
+               return (left . input2())			******the key point for mixed notation
+            }
+         }
+      } else if (token == identifer) {
+         ...
+      } else if (token == integer) {
+         ...
+      } else { error }
+   }
+
+and input2() is still the same. so now I can deal with mixed notation, and fault-detection is done, too.
+
+2) Evaluate
+after you understand the lisp interpreter in lisp from the slides, I think this part is relatively easier than Input. What I did is just translating the lisp interpreter in lisp to java code. the translation is relatively easy, because it's straighforward, the point that worth attention is "defun". I am not saying defun's global state change, that is easy, too. What I am going to say, is how to detect embedded defun, like (FUNC (DEFUN A (Q1 Q2) (EQ Q1 Q2))), what I did, which is not written in lisp pseudo-code, is add a ***depth*** parameter in eval(), evlis(), evcon(), apply(). In each call to eval(), depth ++; so once depth is greater than 1, then DEFUN is embedded, I will report an error.
+
+the lisp interpreter in lisp is excerpted here: 
+
+
+interpreter[dList]	=	eval[exp, NIL, dList] 
+	or better:		output[ eval[input[], NIL, dList] ]
+
+evlis[list, aList, dList] =
+	[	null[list] --->	NIL;
+	|	T --->	cons[ eval[car[list], aList, dList], evlis[cdr[list], ..,..] ] ]
+
+evcon[be, aList, dList]	=   // be is of form ((b1 e1) ... (bn en))
+	[	null[be] -->	NIL; // better: error!;
+	|	eval[caar[be], aList, dList] --->	 eval[cadar[be], aList, dList];
+	|	T --->	evcon[cdr[be], aList, dList] ] 
+
+eval[ exp, aList, dList] =
+	[	atom[exp] 	-->	[	int[exp]	-->	exp
+					|	eq[exp,T]	-->	T						
+					|	eq[exp,NIL]	-->	NIL	
+					|	in[exp,aList]	-->	getVal[exp,aList]
+					|	T		--> "unbound variable!"  ]		
+	|	atom[car[exp]] -->
+					[	eq[car[exp],QUOTE] 	--> cadr[exp]
+					|	eq[car[exp],COND] 	--> evcon[cdr[exp], aList, dList] 
+					|	eq[car[exp],DEFUN] 	--> "add to dList (state change!)"
+					|	T  --> apply[car[exp],  evlis[cdr[exp],aList,dList], aList, dList]  ]
+	|	T	-->  "error!"  ] 
+
+apply[ f, x, aList, dList] =
+	[	atom[f] 	-->	[	eq[f, CAR]	-->	caar[x];
+					|	eq[f, CDR]		-->	cdar[x];
+					|	eq[f, CONS]	-->	cons[car[x], cadr[x]];
+					|	eq[f, ATOM]	-->	atom[car[x]];
+					|	eq[f, NULL]	-->	null[car[x]];
+					|	eq[f, EQ]	-->	eq[car[x], cadr[x]]; 
+					|	T --> eval[ cdr[getval[f, dList]], addpairs[car[getval[f, dList]], x, aList], dList ];];
+	|	T		-->	"error!";  ]
+
+Elements on dList of form:  (f . (pList . body) )
+addpairs[pList,x,aList]: returns new a-list 
+
+some details:
+eval:	evaluates a Lisp-exp. given current parameter 
+	bindings (a-list) and fn. definitions (d-list)
+
+apply:	applies a function to given set of argument values - gets the fn. definition from d-list, binds the formal pars to corr. arg.
+vals, then calls eval to evaluate the body of the fn.
+
+evcon:	evaluates a conditional Lisp-exp: 
+	Given ((b1 e1) (b2 e2) ...): uses eval to evaluate b1, b2, ...
+	until one, bi, evaluates to non-NIL; uses eval to evaluate corr.
+	ei and returns its value.
+
+evlis: evaluates a list of Lisp-exps.
+

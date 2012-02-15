@@ -1,0 +1,106 @@
+Dachuan Huang
+huangda@cse.ohio-state.edu
+
+1. how to use the interpreter?
+
+make (or make compile)
+::: to compile the whole program
+
+make run-io
+::: to run the interpreter in input&output mode
+
+make run
+::: to run the interpreter in input&eval mode
+
+make jar
+::: to create a runnable jar file
+
+make clean
+::: delete *.class and other trivial files
+
+2. what are the files in the project?
+
+the folder is a eclipse project folder, which means I developed it in eclipse, and you can import it to eclipse
+
+.
+├── bin				*.class files will go here
+├── Makefile			makefile, you know
+├── manifest.txt		if you want a runnable jar file, you will probably need this
+├── README			that's me
+└── src				Source code folder
+    ├── Evaluate.java		Interpreter's 2nd component, Evaluator, it accepts a legal S-Exp
+    ├── Input.java		Interpreter's 1st component, Input, it reads a legal S-Exp from stdin
+    ├── LispBuiltin.java	Intrepreter's built-in functions' implementation
+    ├── LispInterpreter.java	Interpreter
+    ├── SExp.java		the Java class for S-Expression in Lisp
+    └── UnitTest.java		the test code, only for development purpose
+
+3. I have tested the whole project with many test cases, here are them if you are interested:
+(if you are in input&output mode)
+1) 23 passed
+2) (23 . 24) passed
+3) (23 . (24 . 25)) passed
+4) ( 23 . (24 . 25)) passed
+5) (\t 23 . (24 . 25)) passed
+6) (23 . 24 \n ) passed
+7) (2 3) passed
+8) (2 3 ) passed
+9) (2 3 4 5 6 7 8 9 ) passed
+10) (2 (3 . 4)) passed
+11) (2 (4 . 5 ) ) passed
+12) ((2 . 3) (4 . 5)) passed
+13) ((2 3) (4 5)) passed
+14) ((2 3 4 5) 23 ) passed
+15) (+24) passed
+16) (-24 +24 -5 +6) passed
+17) (2 \n\n\n . \n\n\n 3) passed
+18) (2 3 . 5) passed (should fail, and should restart normally)
+19) <23 passed (should fail, and should restart normally)
+20) (23 ] passed (should fail, and should restart normally)
+21) (2 5 6 7 1 \n 23 (2 . 4) 3 (4 5) \n ) passed
+22) if SExp is a List, then Print in list notation. passed
+23) A passed
+24) (A 23 (A . 3)) passed
+25) (A . B) passed
+
+(if you are in input&eval mode)
+26) 23 passed
+27) a "only capital letter is allowed"
+28) A "unbound identifer A"
+29) (2 3) "function name should start with capital letter"
+30) (A 3) "function not defined: A"
+31) (QUOTE (2 3 3 3 3)) passed
+32) (COND (T NIL)) passed
+33) (COND (NIL T) (T NIL)) passed
+34) (COND (NIL T ) ( T T)) passed
+35) (COND A) "car error: shouldn't be an atom "
+36) (COND (A NIL)) " unbound identifer A"
+37) (COND (NIL NIL)) "there should be at least one condition which is true"
+38) (2 . 3) "illegal function call format"
+39) (2 3) "function name should start with capital letter"
+40) (2 . (3 . NIL)) "function name should start with capital letter"
+41) (CAR (2 . 3)) "illegal function call format"
+42) (CAR (QUOTE (2 . 3))) passed
+43) (EQ (QUOTE A) (QUOTE A)) passed
+44) (PLUS 222 -90) passed
+45) (MINUS 222 -90) passed
+46) (LESS 2 (QUOTE A)) "should both be an integer"
+47) (LESS (QUOTE 2) (QUOTE 3)) passed
+48) (COND (T NIL)) passed
+49) (COND (NIL T)) "at least one condition should true"
+****test cases for defun****
+50) (DEFUN APPEND (L1 L2) (COND ((NULL L1) L2) (T (CONS (CAR L1) (APPEND (CDR L1) L2))))) passed
+51) (APPEND (QUOTE (2)) (QUOTE (2))) passed
+52) (DEFUN XMEMB (X LIST) (COND ((NULL LIST) NIL) ((EQ X (CAR LIST)) T) (T (XMEMB X (CDR LIST))))) passed
+53) (XMEMB 2 (QUOTE (2 3))) passed
+54) (DEFUN XMEMB (X LIST) (COND ((NULL LIST) NIL) ((EQ X (CAR LIST)) T) (T (XMEMB X (CDR LIST))))) passed
+55) (XUNION (QUOTE (3 4)) (QUOTE (4 5))) passed
+56) (DEFUN EQUAL (X Y) (COND ((ATOM X) (COND ((ATOM Y) (EQ X Y)) (T NIL))) ((ATOM Y) NIL) ((EQUAL (CAR X) (CAR Y)) (EQUAL (CDR X) (CDR Y))) (T NIL))) passed
+57) (EQUAL (QUOTE (2 . 3)) (QUOTE (2 . 3))) passed
+58) (DEFUN ATOMSLIST (S) (COND ((NULL S) NIL) ((ATOM S) (CONS S NIL)) (T (APPEND (ATOMSLIST (CAR S)) (ATOMSLIST (CDR S)))))) passed
+59) (ATOMSLIST (QUOTE ((2 . 3) . 4))) passed
+60) (DEFUN CHECK2 (S) (COND ((NULL S) NIL) ((XMEMB (CAR S) (CDR S)) T) (T (CHECK2 (CDR S)) ) )) passed
+61) (DEFUN CHECK (S) (CHECK2 (ATOMSLIST S))) passed
+62) (CHECK (QUOTE ((2 . 3) . 2))) passed
+63) (QUOTE (2 .3)) found a bug. fixed on 2/14/2012
+64) (.3) "we don't support floating number"
