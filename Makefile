@@ -41,4 +41,4 @@ run:
 	cd $(BIN); $(JAVA) $(MAINCLASS)
 
 clean:
-	find -type f -name "*~"	| xargs rm -rf; rm -rf $(BIN)/*; rm -rf $(JARNAME)
+	rm -rf $(BIN)/*; rm -rf $(JARNAME); rm -rf *~
