@@ -51,17 +51,36 @@ public class LispInterpreter {
 		System.out.println("02/11/2012");
 		System.out.println("Copyright (c) Dachuan Huang");
 		System.out.println("Press Ctrl+C to exit");
+		if (mode == INPUTOUTPUTMODE) {
+			System.out.println("Warning: You are in Input & Output mode, "
+					+ "this mode is only used for debug or test");
+		}
 	}
 
-	public static void init() {
+	// mode control
+	// input&eval mode: the complete and default mode
+	// input&output mode: only input and output the s-exp
+	private static int INPUTEVALMODE = 0;
+	private static int INPUTOUTPUTMODE = 1;
+	private static String INPUTOUTPUTOPTION = "inputoutput";
+	private static int mode = INPUTEVALMODE;
+
+	private static void init_mode(String[] args) {
+		if (args.length == 1 && args[0].equals(INPUTOUTPUTOPTION) == true) {
+			mode = INPUTOUTPUTMODE;
+		}
+	}
+
+	private static void init(String[] args) {
 		init_IDPOINTERS();
+		init_mode(args);
 		welcome();
 	}
 
 	public static void main(String[] args) {
 		// Lisp Interpreter Initialization
 		// vital code
-		init();
+		init(args);
 
 		// self test, you can comment these following lines.
 		// System.out.println("self test");
@@ -158,10 +177,13 @@ public class LispInterpreter {
 				System.out.printf("[%d]>", exp_num++);
 				// 1st, user input
 				SExp se = Input.input();
-				// optional, output this input, usually for debug purpose
-				// SExp.SExpPrintOut(se);
-				// 2nd, output the evaluation result
-				SExp.SExpPrintOut(Evaluate.eval(se, SExp.getNIL(), dlist));
+				if (mode == INPUTOUTPUTMODE) {
+					// optional, output this input, usually for debug purpose
+					SExp.SExpPrintOut(se);
+				} else {
+					// 2nd, output the evaluation result
+					SExp.SExpPrintOut(Evaluate.eval(se, SExp.getNIL(), dlist));
+				}
 			} catch (InputException e) {
 				// TODO Auto-generated catch block
 				// e.printStackTrace();
@@ -181,6 +203,7 @@ public class LispInterpreter {
 				// e.printStackTrace();
 				System.out.println(e);
 			}
+
 		}
 	}
 }
