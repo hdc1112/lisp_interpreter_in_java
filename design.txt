@@ -63,13 +63,13 @@ interpreter[dList]	=	eval[exp, NIL, dList]
 	or better:		output[ eval[input[], NIL, dList] ]
 
 evlis[list, aList, dList] =
-	[	null[list] --->	NIL;
-	|	T --->	cons[ eval[car[list], aList, dList], evlis[cdr[list], ..,..] ] ]
+	[	null[list] 	-->	NIL;
+	|	T 		-->	cons[ eval[car[list], aList, dList], evlis[cdr[list], ..,..] ] ]
 
 evcon[be, aList, dList]	=   // be is of form ((b1 e1) ... (bn en))
-	[	null[be] -->	NIL; // better: error!;
-	|	eval[caar[be], aList, dList] --->	 eval[cadar[be], aList, dList];
-	|	T --->	evcon[cdr[be], aList, dList] ] 
+	[	null[be] 	-->	NIL; // better: error!;
+	|	eval[caar[be], aList, dList] -->	 eval[cadar[be], aList, dList];
+	|	T 		-->	evcon[cdr[be], aList, dList] ] 
 
 eval[ exp, aList, dList] =
 	[	atom[exp] 	-->	[	int[exp]	-->	exp
@@ -77,12 +77,12 @@ eval[ exp, aList, dList] =
 					|	eq[exp,NIL]	-->	NIL	
 					|	in[exp,aList]	-->	getVal[exp,aList]
 					|	T		--> "unbound variable!"  ]		
-	|	atom[car[exp]] -->
+	|	atom[car[exp]]  -->
 					[	eq[car[exp],QUOTE] 	--> cadr[exp]
 					|	eq[car[exp],COND] 	--> evcon[cdr[exp], aList, dList] 
 					|	eq[car[exp],DEFUN] 	--> "add to dList (state change!)"
 					|	T  --> apply[car[exp],  evlis[cdr[exp],aList,dList], aList, dList]  ]
-	|	T	-->  "error!"  ] 
+	|	T		-->  "error!"  ] 
 
 apply[ f, x, aList, dList] =
 	[	atom[f] 	-->	[	eq[f, CAR]	-->	caar[x];
