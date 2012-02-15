@@ -177,7 +177,6 @@ public class LispInterpreter {
 				System.out.printf("[%d]>", exp_num++);
 				// 1st, user input
 				SExp se = Input.input();
-
 				if (mode == INPUTOUTPUTMODE) {
 					// optional, output this input, usually for debug purpose
 					SExp.SExpPrintOut(se);
