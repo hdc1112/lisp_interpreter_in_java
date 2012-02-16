@@ -142,6 +142,15 @@ public class Input {
 					|| c == 13)
 				;
 
+			// very important.
+			// if use is redirect some file to stdin, then EOF
+			// must be correctly dealed.
+			// see javadoc System.in.read() for more information
+			if (-1 == c) {
+				System.out.println("End-of-file");
+				System.exit(0);
+			}
+
 			if (c == '(') {
 				Token t = new Token();
 				t.type = Token.LEFT_PARENTHESIS;

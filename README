@@ -3,14 +3,21 @@ huangda@cse.ohio-state.edu
 
 1. how to use the interpreter? 
 
+IMPORTANT notice for redirection:
+if you want to use input redirection, you can do it in this way:
+cat <file-name> | make run-1stpart  (to ***grader***, after compiling, you only need to type this to test the first part of this project if you use redirection, thanks)
+cat <file-name> | make run          (to ***grader***, after compiling, you only need to type this to test the whole project if you use redirection, thanks)
+DON'T DO IT IN THIS WAY:
+(THIS IS WRONG) make run-1stpart `cat <file-name` (THIS IS WRONG)
+
 make (or make compile)
 ::: to compile the whole program
-::: make sure that you do this after you modify the source code!
+::: make sure that you do this after you modify the source code or there is not .class file in bin/
 
 make run (in default, it is in eval mode & list printing is on)
 ::: to run the interpreter 
 
-make run-1stpart (to ***grader***, you only need to type this to test the first part of this project, thanks)
+make run-1stpart (to ***grader***, after compiling, you only need to type this to test the first part of this project if you want to be in interactive mode, thanks)
 ::: to run the interpreter in input&eval mode, and list printing is forbidden
 
 make run-evaloff-listprintoff
