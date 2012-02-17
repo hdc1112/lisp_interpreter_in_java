@@ -1,27 +1,18 @@
+README for Lisp Interpreter in Java
 Dachuan Huang
 huangda@cse.ohio-state.edu
 
 1. how to use the interpreter? 
 
-IMPORTANT notice for redirection:
-if you want to use input redirection, you can do it in this way:
-(to ***grader***, after compiling, you only need to type this to test the ***first part*** of this project if you use redirection, thanks)
-cat test.txt | make run-1stpart   OR   make run-1stpart < test.txt
-
-(to ***grader***, after compiling, you only need to type this to test the ***whole project*** if you use redirection, thanks)
-cat <file-name> | make run        OR   make run < test.txt
-
-DON'T DO IT IN THIS WAY:
-(THIS IS WRONG) make run-1stpart `cat <file-name` (THIS IS WRONG)
-
 make (or make compile)
 ::: to compile the whole program
 ::: make sure that you do this after you modify the source code or there is not .class file in bin/
 
-make run (by default, we are in eval mode && list printing is on && lower case letters are allowed && lower case letters are changed to capital letters at input)
+make run 
 ::: to run the interpreter 
+::: by default, eval is on && list printing is on && lower case letter is on && case insensitive
 
-make run-1stpart (to ***grader***, after compiling, you only need to type this to test the first part of this project if you want to be in interactive mode, thanks)
+make run-1stpart 
 ::: to run the interpreter in input&eval mode, and list printing is forbidden
 
 make run-evaloff-listprintoff
@@ -36,9 +27,24 @@ make jar
 make clean
 ::: delete *.class and other trivial files
 
-IMPORTANT if you want to add extra arguments to the project:
-you should do : make run XARGS="lowercaseoff" to forbid the lower case letters input
-or : make run XARGS="lowercasesameoff" to make this project case sensitive (built-in functions are still CAPITAL)
+make help
+::: if you need help
+
+!!!!!IMPORTANT!!!!! 
+notice for redirection:
+if you want to use input redirection, you can do it in this way:
+cat test.txt | make run-1stpart   OR   make run-1stpart < test.txt	(!!!!!grader!!!!!)
+cat <file-name> | make run        OR   make run < test.txt		(!!!!!grader!!!!!)
+
+!!!!!DON'T DO IT IN THIS WAY!!!!!
+(THIS IS WRONG) make run-1stpart `cat <file-name` (THIS IS WRONG)
+
+!!!!!IMPORTANT!!!!! 
+make run XARGS="lowercaseoff" 
+::: forbid the lower case letters input
+
+make run XARGS="lowercasesameoff" 
+::: make this project case sensitive (built-in functions are still CAPITAL)
 
 2. what are the files in the project?
 

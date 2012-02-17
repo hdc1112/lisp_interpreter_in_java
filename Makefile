@@ -10,8 +10,8 @@
 # Author: Dachuan Huang
 # huangda@cse.ohio-state.edu
 
-.PHONY: compile jar run-evaloff-listprintoff run-evaloff run-listprintoff run clean pre
-
+.PHONY: compile jar run-evaloff-listprintoff run-evaloff \
+	run-listprintoff run clean pre clearscreen help run-1stpart
 BIN = ./bin/
 SRC = ./src/
 
@@ -36,8 +36,11 @@ LISTPRINTOFF = listprintoff
 # to the XARGS, see README for details
 XARGS =
 
+# print how many lines of manual from README?
+MAN=48
+
 compile: pre
-	cd $(SRC); $(JAVAC) $(JAVAFLAGS) *.java $(XARGS)
+	cd $(SRC); $(JAVAC) $(JAVAFLAGS) *.java $(XARGS); if test -e ../README; then head -$(MAN) ../README; else true; fi
 
 jar: 
 	cd $(BIN); $(JAR) $(JARFLAGS) $(JARNAME) ../$(MANIFEST) *.class $(XARGS); mv $(JARNAME) ../
@@ -58,8 +61,14 @@ run:
 clean:
 	rm -rf $(BIN)/*; rm -rf $(JARNAME); rm -rf *~
 
-pre:
+pre: clearscreen
 	if test -d $(BIN); then true; else mkdir $(BIN); fi 
+
+clearscreen:
+	clear
+
+help: clearscreen
+	if test -e README; then head -$(MAN) README; else true; fi
 
 # just because it's too boring to type run-evaloff-listprintoff
 # to ***grader***, run this to test the first part of this project!
