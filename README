@@ -30,21 +30,18 @@ make clean
 make help
 ::: if you need help
 
-!!!!!IMPORTANT!!!!! 
-notice for redirection:
-if you want to use input redirection, you can do it in this way:
-cat test.txt | make run-1stpart   OR   make run-1stpart < test.txt	(!!!!!grader!!!!!)
-cat <file-name> | make run        OR   make run < test.txt		(!!!!!grader!!!!!)
-
-!!!!!DON'T DO IT IN THIS WAY!!!!!
-(THIS IS WRONG) make run-1stpart `cat <file-name` (THIS IS WRONG)
-
-!!!!!IMPORTANT!!!!! 
 make run XARGS="lowercaseoff" 
 ::: forbid the lower case letters input
 
 make run XARGS="lowercasesameoff" 
 ::: make this project case sensitive (built-in functions are still CAPITAL)
+
+!!!!!IMPORTANT!!!!! 
+if your input is from file, you can do it in this way:(using pipe or redirection)
+cat test.txt | make run-1stpart   OR   make run-1stpart < test.txt	(!!!!!grader!!!!!)
+cat <file-name> | make run        OR   make run < test.txt		(!!!!!grader!!!!!)
+DON'T DO IT IN THIS WAY:
+(THIS IS WRONG) make run-1stpart `cat <file-name` (THIS IS WRONG)
 
 2. what are the files in the project?
 

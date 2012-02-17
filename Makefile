@@ -37,7 +37,7 @@ LISTPRINTOFF = listprintoff
 XARGS =
 
 # print how many lines of manual from README?
-MAN=48
+MAN=45
 
 compile: pre
 	cd $(SRC); $(JAVAC) $(JAVAFLAGS) *.java $(XARGS); head -$(MAN) ../README
