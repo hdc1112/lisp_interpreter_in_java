@@ -40,7 +40,7 @@ XARGS =
 MAN=48
 
 compile: pre
-	cd $(SRC); $(JAVAC) $(JAVAFLAGS) *.java $(XARGS); if test -e ../README; then head -$(MAN) ../README; else true; fi
+	cd $(SRC); $(JAVAC) $(JAVAFLAGS) *.java $(XARGS); head -$(MAN) ../README
 
 jar: 
 	cd $(BIN); $(JAR) $(JARFLAGS) $(JARNAME) ../$(MANIFEST) *.class $(XARGS); mv $(JARNAME) ../
@@ -68,7 +68,7 @@ clearscreen:
 	clear
 
 help: clearscreen
-	if test -e README; then head -$(MAN) README; else true; fi
+	head -$(MAN) README
 
 # just because it's too boring to type run-evaloff-listprintoff
 # to ***grader***, run this to test the first part of this project!
