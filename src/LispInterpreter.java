@@ -19,34 +19,66 @@ import java.io.IOException;
 //some command line parsing library to bluff
 class Gconfig {
 	// default configuration: every bit is cleared
+	// which means:
+	// eval is on; add "evaloff" if you wanna turn this feature off
+	// listprint is on; add "listprintoff" if you wanna turn this feature off
+	// lowercase is on; add "lowercaseoff" if you wanna turn this feature off
+	// lowercasesame is on; add "lowercasesameoff" if you wanna turn this
+	// feature off
 	public static int mode = 0x0;
 
 	// input&output mode: only input and output the s-exp
 	public static int EVALOFFMODE = 0x1;
 	private static String EVALOFFOPT = "evaloff";
+
 	// "don't print list notation" mode
 	public static int LISTPRINTOFFMODE = 0x2;
 	private static String LISTPRINTOFFOPT = "listprintoff";
 
+	// lowercase off mode (we don't accept lower case input)
+	public static int LOWERCASEOFFMODE = 0x4;
+	private static String LOWERCASEOFFOPT = "lowercaseoff";
+
+	// lowercasesame off mode (we treat lower case letters differently from
+	// capital letters
+	public static int LOWERCASESAMEOFFMODE = 0x8;
+	private static String LOWERCASESAMEOFFOPT = "lowercasesameoff";
+
 	// only called by LispInterpreter's init()
-	public static void init_mode(String[] args) {
+	public static void init_config(String[] args) {
 		for (int i = 0; i < args.length; i++) {
+			// I should put some help or usage printing
+			// here, but let's forget it now
 			if (args[i].equals(EVALOFFOPT) == true) {
 				mode |= EVALOFFMODE;
 			} else if (args[i].equals(LISTPRINTOFFOPT) == true) {
 				mode |= LISTPRINTOFFMODE;
+			} else if (args[i].equals(LOWERCASEOFFOPT) == true) {
+				mode |= LOWERCASEOFFMODE;
+			} else if (args[i].equals(LOWERCASESAMEOFFOPT) == true) {
+				mode |= LOWERCASESAMEOFFMODE;
+			} else {
+				System.out.println("Ignore the unrecognizable option: "
+						+ args[i]);
 			}
 		}
 	}
 
 	// only called by LispInterpreter's welcome()
-	public static void welcome() {
+	public static void warning() {
 		if ((mode & EVALOFFMODE) != 0) {
 			System.out.println("Warning: You are in Input & Output mode, "
 					+ "this mode is only used for debug or test");
 		}
 		if ((mode & LISTPRINTOFFMODE) != 0) {
 			System.out.println("Warning: list notation printing is turned off");
+		}
+		if ((mode & LOWERCASEOFFMODE) != 0) {
+			System.out.println("Warning: lower case letters are "
+					+ "now forbidden for input");
+		} else if ((mode & LOWERCASESAMEOFFMODE) != 0) {
+			System.out.println("Warning: now the interpreter is "
+					+ "case sensitive, but built-in functions are still CAPITAL");
 		}
 	}
 }
@@ -91,12 +123,12 @@ public class LispInterpreter {
 		System.out.println("02/11/2012");
 		System.out.println("Copyright (c) Dachuan Huang");
 		System.out.println("Press Ctrl+C to exit");
-		Gconfig.welcome();
+		Gconfig.warning();
 	}
 
 	private static void init(String[] args) {
 		init_IDPOINTERS();
-		Gconfig.init_mode(args);
+		Gconfig.init_config(args);
 		welcome();
 	}
 

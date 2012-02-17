@@ -258,12 +258,12 @@ public class Input {
 										+ value);
 					}
 				}
-			} else if (isCapitalLetter(c)) {
+			} else if (isLetter(c)) {
 				// throw new RuntimeException("not implemented yet.");
 				// once you have a correct integer input code,
 				// it's very easy to write a identifer input code.
 				StringBuffer sb = new StringBuffer();
-				sb.append((char) c);
+				sb.append((char) letter(c));
 				while (true) {
 					c = System.in.read();
 					if (c == ' ' || c == '\t' || c == '\n' || c == 13
@@ -278,33 +278,26 @@ public class Input {
 							t.right_parenthesis_prefetched = true;
 						}
 						return t;
-					} else if (isCapitalLetter(c) || isDigit(c)) {
+					} else if (isLetter(c)) {
+						sb.append((char) letter(c));
+					} else if (isDigit(c)) {
 						sb.append((char) c);
 					} else {
 						_flush();
-						if (isLowercaseLetter(c)) {
-							throw new InputException(
-									"only capital letter is allowed ");
-						} else {
-							throw new InputException(
-									"ckNextToken error: illegal character "
-											+ (char) c);
-						}
+						throw new InputException(
+								"ckNextToken error: illegal character "
+										+ (char) c);
 					}
 				}
 			} else {
 				_flush();
-				// I try to be nice to user
-				if (isLowercaseLetter(c)) {
-					throw new InputException("only capital letter is allowed");
-				} else {
-					throw new InputException(
-							"ckNextToken error: illegal character " + (char) c);
-				}
+				throw new InputException(
+						"ckNextToken error: illegal character " + (char) c);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			// if read error, we can do nothing
+			System.out.println(e);
 			throw new RuntimeException("System.in.read() error");
 		}
 	}
@@ -332,6 +325,50 @@ public class Input {
 			return true;
 		}
 		return false;
+	}
+
+	private static boolean isLetter(int c) {
+		if (isCapitalLetter(c) || isLowercaseLetter(c)) {
+			return true;
+		}
+		return false;
+	}
+
+	// make sure c is a letter before calling
+	private static int capitalize(int c) {
+		if (isCapitalLetter(c) == true) {
+			return c;
+		} else {
+			return c + 'A' - 'a';
+		}
+	}
+
+	// I add this function when I want to
+	// deal with lower case letters. So no matter
+	// what the future will be, this function will
+	// be used to deal with every letter input, even
+	// this just return it.
+	// be careful this function relies on
+	// global object and an assumption that this
+	// object never changes during runtime.
+	private static int letter(int c) throws InputException, IOException {
+		if (isCapitalLetter(c) == true) {
+			return c;
+		} else if ((Gconfig.mode & Gconfig.LOWERCASEOFFMODE) != 0) {
+			// by default, c is lower case letter now
+			// so it's an error
+			_flush();
+			throw new InputException("only capital letter is allowed");
+		} else if ((Gconfig.mode & Gconfig.LOWERCASESAMEOFFMODE) != 0) {
+			// if we allow lower case letter and if we think
+			// it's case sensitive then just return it.
+			// this is the one of the two possible places to accept a
+			// lower case letter from input
+			return c;
+		} else {
+			// this is another place
+			return capitalize(c);
+		}
 	}
 
 	private static void flushStdin() throws IOException {

@@ -29,24 +29,31 @@ JAVA = java
 EVALOFF = evaloff
 LISTPRINTOFF = listprintoff
 
+# want to add some extra arguments to the tail of make?
+# do this:
+# make run XARGS="foo bar"
+# you can add "lowercaseoff" or "lowercasesameoff"
+# to the XARGS, see README for details
+XARGS =
+
 compile: pre
-	cd $(SRC); $(JAVAC) $(JAVAFLAGS) *.java 
+	cd $(SRC); $(JAVAC) $(JAVAFLAGS) *.java $(XARGS)
 
 jar: 
-	cd $(BIN); $(JAR) $(JARFLAGS) $(JARNAME) ../$(MANIFEST) *.class; mv $(JARNAME) ../
+	cd $(BIN); $(JAR) $(JARFLAGS) $(JARNAME) ../$(MANIFEST) *.class $(XARGS); mv $(JARNAME) ../
 
 run-evaloff-listprintoff:
-	cd $(BIN); $(JAVA) $(MAINCLASS) $(EVALOFF) $(LISTPRINTOFF)
+	cd $(BIN); $(JAVA) $(MAINCLASS) $(EVALOFF) $(LISTPRINTOFF) $(XARGS)
 
 run-evaloff:
-	cd $(BIN); $(JAVA) $(MAINCLASS) $(EVALOFF)
+	cd $(BIN); $(JAVA) $(MAINCLASS) $(EVALOFF) $(XARGS)
 
 # not commonly used
 run-listprintoff:
-	cd $(BIN); $(JAVA) $(MAINCLASS)            $(LISTPRINTOFF)
+	cd $(BIN); $(JAVA) $(MAINCLASS) $(LISTPRINTOFF) $(XARGS)
 
 run:
-	cd $(BIN); $(JAVA) $(MAINCLASS)
+	cd $(BIN); $(JAVA) $(MAINCLASS) $(XARGS)
 
 clean:
 	rm -rf $(BIN)/*; rm -rf $(JARNAME); rm -rf *~

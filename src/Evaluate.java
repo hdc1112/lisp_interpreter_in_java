@@ -348,7 +348,7 @@ public class Evaluate implements LispBuiltin_Names {
 				// we assume each function call is essentially a list s-exp
 				if (SExp.isList(exp) == false) {
 					throw new EvaluateException(
-							"eval error: illegal function call format");
+							"eval error: illegal function call, function call should be a list");
 				}
 				return apply(car(exp), evlis(cdr(exp), alist, dlist, depth),
 						alist, dlist, depth);
@@ -364,7 +364,7 @@ public class Evaluate implements LispBuiltin_Names {
 		if (SExp.isT(atom(f)) == true) {
 			if (SExp.isT(_int(f)) == true) {
 				throw new EvaluateException(
-						"apply error: function name should start with capital letter");
+						"apply error: function name should not start with a digit");
 			}
 			// first check whether this is a built-in function
 			// look at the requirements to know what the
