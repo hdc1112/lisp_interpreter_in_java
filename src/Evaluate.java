@@ -191,26 +191,30 @@ public class Evaluate implements LispBuiltin_Names {
 	}
 
 	// assisting function
+	// warning: this is not a general implementation
+	// this is only an ad-hoc implementation
 	// make (p1 p2) (2 3) to ((p1 . 2) (p2 . 3))
-	// if it's (p1 p2) (2) then too few arguments
-	// if it's (p1 p2) (2 3 4) then too many arguments
-	// we don't say which function
-	private static SExp pair(SExp x, SExp y) throws EvaluateException,
+	// if it's (p1 p2) (2) then too few arguments given to f
+	// if it's (p1 p2) (2 3 4) then too many arguments given to f
+	// we don't check each argument's type here, be careful.
+	private static SExp pair(SExp f, SExp x, SExp y) throws EvaluateException,
 			LispBuiltinException {
 		if (SExp.isNIL(x) == true) {
 			if (SExp.isNIL(y) == true) {
 				return SExp.getNIL();
 			} else {
-				throw new EvaluateException("pair error: too many arguments");
+				throw new EvaluateException(
+						"pair error: too many arguments given to " + f);
 			}
 		} else if (SExp.isNIL(y) == true) {
 			if (SExp.isNIL(x) == true) {
 				return SExp.getNIL();
 			} else {
-				throw new EvaluateException("pair error: too few arguments");
+				throw new EvaluateException(
+						"pair error: too few arguments given to " + f);
 			}
 		} else {
-			return cons(cons(car(x), car(y)), pair(cdr(x), cdr(y)));
+			return cons(cons(car(x), car(y)), pair(f, cdr(x), cdr(y)));
 		}
 	}
 
@@ -406,7 +410,7 @@ public class Evaluate implements LispBuiltin_Names {
 				// builtin functions are above, they are
 				// not in dlist. but user-defined functions are
 				SExp f_def = getVal(f, dlist);
-				return _eval(cdr(f_def), append(pair(car(f_def), x), alist),
+				return _eval(cdr(f_def), append(pair(f, car(f_def), x), alist),
 						dlist, depth + 1);
 			} else {
 				throw new EvaluateException(
