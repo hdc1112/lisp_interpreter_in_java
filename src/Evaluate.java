@@ -218,6 +218,42 @@ public class Evaluate implements LispBuiltin_Names {
 		}
 	}
 
+	// if it's not a list, user has mistakes
+	// now it's only used by listlen()
+	private static void listck(SExp s) throws EvaluateException {
+		if (SExp.isList(s) == false) {
+			throw new EvaluateException("listck error: " + s + " is not a list");
+		}
+	}
+
+	// now this is only used by apply()
+	private static int listlen(SExp s) throws EvaluateException,
+			LispBuiltinException {
+		// maybe i need to change the SExp.isList to return -1 or length
+		// but i am lazy now.
+		listck(s);
+		int len = 0;
+		while (SExp.isNIL(s) == false) {
+			s = cdr(s);
+			len++;
+		}
+		return len;
+	}
+
+	// only used by apply()
+	// to check the arguments' number in builtin-functions
+	private static void builtin_opsck(SExp param, String builtinf, int expected)
+			throws EvaluateException, LispBuiltinException {
+		int len = listlen(param);
+		if (len > expected) {
+			throw new EvaluateException(
+					"apply error: too many arguments given to " + builtinf);
+		} else if (len < expected) {
+			throw new EvaluateException(
+					"apply error: too few arguments given to " + builtinf);
+		}
+	}
+
 	// these functions are main functions of evaluator
 
 	// eval this list.
@@ -376,35 +412,53 @@ public class Evaluate implements LispBuiltin_Names {
 			// see LispBuiltin.java.
 			// haven't checked the arguments number in builtin-function
 			if (SExp.isT(eq(f, SExp.getIdSExp(CONS_name))) == true) {
+				// cons only needs two arguments.
+				builtin_opsck(x, CONS_name, CONS_ops);
 				return cons(car(x), cadr(x));
 			} else if (SExp.isT(eq(f, SExp.getIdSExp(CAR_name))) == true) {
 				// known bug.
 				// should check that x is a list
+				builtin_opsck(x, CAR_name, CAR_ops);
 				return caar(x);
 			} else if (SExp.isT(eq(f, SExp.getIdSExp(CDR_name))) == true) {
+				builtin_opsck(x, CDR_name, CDR_ops);
 				return cdar(x);
 			} else if (SExp.isT(eq(f, SExp.getIdSExp(ATOM_name))) == true) {
+				builtin_opsck(x, ATOM_name, ATOM_ops);
 				return atom(car(x));
 			} else if (SExp.isT(eq(f, SExp.getIdSExp(NULL_name))) == true) {
+				builtin_opsck(x, NULL_name, NULL_ops);
 				return LispBuiltin._null(car(x));
 			} else if (SExp.isT(eq(f, SExp.getIdSExp(EQ_name))) == true) {
+				builtin_opsck(x, EQ_name, EQ_ops);
 				return eq(car(x), cadr(x));
 			} else if (SExp.isT(eq(f, SExp.getIdSExp(INT_name))) == true) {
+				builtin_opsck(x, INT_name, INT_ops);
 				return _int(car(x));
 			} else if (SExp.isT(eq(f, SExp.getIdSExp(PLUS_name))) == true) {
+				builtin_opsck(x, PLUS_name, PLUS_ops);
 				return LispBuiltin.plus(car(x), cadr(x));
 			} else if (SExp.isT(eq(f, SExp.getIdSExp(MINUS_name))) == true) {
+				builtin_opsck(x, MINUS_name, MINUS_ops);
 				return LispBuiltin.minus(car(x), cadr(x));
 			} else if (SExp.isT(eq(f, SExp.getIdSExp(TIMES_name))) == true) {
+				builtin_opsck(x, TIMES_name, TIMES_ops);
 				return LispBuiltin.times(car(x), cadr(x));
 			} else if (SExp.isT(eq(f, SExp.getIdSExp(QUOTIENT_name))) == true) {
+				builtin_opsck(x, QUOTIENT_name, QUOTIENT_ops);
 				return LispBuiltin.quotient(car(x), cadr(x));
 			} else if (SExp.isT(eq(f, SExp.getIdSExp(REMAINDER_name))) == true) {
+				builtin_opsck(x, REMAINDER_name, REMAINDER_ops);
 				return LispBuiltin.remainder(car(x), cadr(x));
 			} else if (SExp.isT(eq(f, SExp.getIdSExp(LESS_name))) == true) {
+				builtin_opsck(x, LESS_name, LESS_ops);
 				return LispBuiltin.less(car(x), cadr(x));
 			} else if (SExp.isT(eq(f, SExp.getIdSExp(GREATER_name))) == true) {
+				builtin_opsck(x, GREATER_name, GREATER_ops);
 				return LispBuiltin.greater(car(x), cadr(x));
+				// comments for that if you want to add new builtin-func
+				// remember to check the args number
+				// which means you need to call builtin_opsck() !
 			} else if (SExp.isT(in(f, dlist)) == true) {
 				// now is user-defined functions
 				// builtin functions are above, they are

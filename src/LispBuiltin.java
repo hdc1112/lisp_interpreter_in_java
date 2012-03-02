@@ -37,6 +37,23 @@ interface LispBuiltin_Names {
 	public static final String REMAINDER_name = "REMAINDER";
 	public static final String LESS_name = "LESS";
 	public static final String GREATER_name = "GREATER";
+
+	// update the following when some change is made
+	// to the above
+	public static final int CONS_ops = 2;
+	public static final int CAR_ops = 1;
+	public static final int CDR_ops = 1;
+	public static final int ATOM_ops = 1;
+	public static final int NULL_ops = 1;
+	public static final int EQ_ops = 2;
+	public static final int INT_ops = 1;
+	public static final int PLUS_ops = 2;
+	public static final int MINUS_ops = 2;
+	public static final int TIMES_ops = 2;
+	public static final int QUOTIENT_ops = 2;
+	public static final int REMAINDER_ops = 2;
+	public static final int LESS_ops = 2;
+	public static final int GREATER_ops = 2;
 }
 
 // some Lisp built-in functions
